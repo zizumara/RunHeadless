@@ -1,0 +1,10 @@
+[Unit]
+Description=Launches the python script runheadless.py.
+
+[Service]
+Type=simple
+ExecStart=/bin/bash /usr/local/bin/runheadless.sh
+
+[Install]
+WantedBy=multi-user.target
+
