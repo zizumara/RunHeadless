@@ -58,3 +58,5 @@ These instructions assume that runheadless.py is located in /home/pi/RunHeadless
 # Hardware Example
 
 ![Control/status circuit](circuit.png)
+
+(NOTE: The connector pin numbers below do not represent Raspberry Pi pins.  Refer to runheadless.py to map signal names to Raspberry Pi pins.)
