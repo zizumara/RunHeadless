@@ -55,3 +55,6 @@ These instructions assume that runheadless.py is located in /home/pi/RunHeadless
 
       sudo systemctl start runheadless
 
+# Hardware Example
+
+![Control/status circuit](circuit.png)
