@@ -18,8 +18,8 @@ PIN_APPCTL  = 33    # button 1 pressed: start/stop application (toggle)
 PIN_SHDNCTL = 31    # button 2 pressed: request system shutdown
 PIN_APPENA  = 35    # switch 1 ON: application start/stop button enabled
 PIN_SHDNENA = 36    # switch 2 ON: system shutdown button enabled
-PIN_SYSRUN  = 40    # LED flashing: system is running
-PIN_APPRUN  = 37    # LED flashing: application is running
+PIN_SYSSTS  = 40    # LED flashing: system is running
+PIN_APPSTS  = 37    # LED flashing: application is running
 PIN_SHDNSTS = 38    # LED ON: request system shutdown
 
 def timestamp():
@@ -64,11 +64,11 @@ args = vars(ap.parse_args())
 # Set up GPIO inputs and outputs.  Note that all inputs are active low.
 GPIO.setmode(GPIO.BOARD)
 GPIO.setwarnings(False)
-GPIO.setup(PIN_SYSRUN, GPIO.OUT)
-GPIO.setup(PIN_APPRUN, GPIO.OUT)
+GPIO.setup(PIN_SYSSTS, GPIO.OUT)
+GPIO.setup(PIN_APPSTS, GPIO.OUT)
 GPIO.setup(PIN_SHDNSTS, GPIO.OUT)
-GPIO.output(PIN_SYSRUN, GPIO.LOW)
-GPIO.output(PIN_APPRUN, GPIO.LOW)
+GPIO.output(PIN_SYSSTS, GPIO.LOW)
+GPIO.output(PIN_APPSTS, GPIO.LOW)
 GPIO.output(PIN_SHDNSTS, GPIO.LOW)
 GPIO.setup(PIN_SHDNCTL, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(PIN_SHDNENA, GPIO.IN, pull_up_down=GPIO.PUD_UP)
@@ -89,7 +89,7 @@ shutdownEnabled = False
 reqShutdown = False
 appEnabled = False
 appRunning = False
-GPIO.output(PIN_SYSRUN, GPIO.HIGH)
+GPIO.output(PIN_SYSSTS, GPIO.HIGH)
 
 # Continuously report status until shutdown requested.
 while reqShutdown == False:
@@ -112,14 +112,14 @@ while reqShutdown == False:
     # adds to the main loop delay.
     for count in range(0, MAX_COUNT):
         if count == ON_COUNT:
-            GPIO.output(PIN_SYSRUN, GPIO.HIGH)
+            GPIO.output(PIN_SYSSTS, GPIO.HIGH)
         elif count == OFF_COUNT:
-            GPIO.output(PIN_SYSRUN, GPIO.LOW)
+            GPIO.output(PIN_SYSSTS, GPIO.LOW)
         if appRunning:
             if count == ON_COUNT:
-                GPIO.output(PIN_APPRUN, GPIO.HIGH)
+                GPIO.output(PIN_APPSTS, GPIO.HIGH)
             elif count == OFF_COUNT:
-                GPIO.output(PIN_APPRUN, GPIO.LOW)
+                GPIO.output(PIN_APPSTS, GPIO.LOW)
         time.sleep(intervalSecs)
 
     # Start/stop application if application start/stop button pressed.
@@ -143,9 +143,9 @@ while reqShutdown == False:
                     print(f'{timestamp()} Requested application exit {args["app"]}.')
                     os.system(f'ls > {args["flag"]}')
                     for checks in range(0, 12):
-                        GPIO.output(PIN_APPRUN, GPIO.HIGH)
+                        GPIO.output(PIN_APPSTS, GPIO.HIGH)
                         time.sleep(0.2)
-                        GPIO.output(PIN_APPRUN, GPIO.LOW)
+                        GPIO.output(PIN_APPSTS, GPIO.LOW)
                         time.sleep(0.2)
                         (appRunning, appPid) = procExists(f'python3 {args["app"]}')
                         if not appRunning:
