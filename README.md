@@ -57,6 +57,7 @@ These instructions assume that runheadless.py is located in /home/pi/RunHeadless
 
 # Hardware Example
 
+An example control board design is included in KiCAD 6 files.  Refer to the schematic below.
 (NOTE: The connector pin numbers below do not represent Raspberry Pi pins.  Refer to runheadless.py to map signal names to Raspberry Pi pins.)
 
 ![Control/status circuit](circuit.png)
